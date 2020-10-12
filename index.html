@@ -1,0 +1,49 @@
+<html>
+	<script src="drawingUtils.js"></script>
+	<script src="animation.js"></script>
+	<script src="menu.js"></script>
+	<script src="pathFinding.js"></script>
+	<script src="tactics.js"></script>
+	<script src="target.js"></script>
+	<script src="drawing.js"></script>
+	<script src="gameControl.js"></script>
+<script>
+
+//initial target speed
+var tgtspeed = 10;//kts
+
+//aircraft parameters
+var patternspeed = 200;//kts
+var aob = 45;//angle of bank for the aircraft
+
+
+//size of initial datum
+var major = 1000;//yards
+
+//gaming parameters
+var MDR = 1000;//range of the sensor (yds)
+var killrange = 500;//range of the weapon (yds)
+
+
+
+//the resolution of the gaming area
+var cpdres = new Object;
+var fontsize= Math.min(cpdres.x,cpdres.y) * .05;
+
+//admin variables
+var newpath = 1;
+var initmenu = true;
+
+
+layout();
+cpdmain();
+initdrawmenu();
+
+
+</script> <style>
+/* Style the list */ ul.tab { list-style-type: none; margin: 0; padding: 0; overflow: hidden; border: 1px solid #ccc; background-color: #f1f1f1; } tr:nth-child(even)
+{background-color: #f2f2ff;} tr:nth-child(odd) {background-color: #d3d3d3;} /* Float the list items side by side */ ul.tab li {float: left;} /* Style the links inside the list
+items */ ul.tab li a { display: inline-block; color: black; text-align: center; padding: 14px 16px; text-decoration: none; transition: 0.3s; font-size: 17px; } /* Change background
+color of links on hover */ ul.tab li a:hover {background-color: #ddd;} /* Create an active/current tablink class */ ul.tab li a:focus, .active {background-color: #ccc;} /* Style
+the tab content */ .tabcontent { display: none; padding: 6px 12px; border: 1px solid #ccc; border-top: none; } .reporter {background-color:#FFFF00;} table {border-collapse:
+collapse; } hml, body, div, canvas { margin: 0; padding: 0; } </style> <body> </body> </html>
