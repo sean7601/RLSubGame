@@ -68,7 +68,7 @@ function tempdrawline(){
 			cpdcontext.lineTo(posit.x,-1*(posit.y));
 			cpdcontext.stroke();
 			cpdcontext.setLineDash([]);
-			// Translate to end of line, draw arrowhead, rotate it, fill it, translate back to origin
+			// Translate to end of line, draw arrowhead, fill it
 			let arrowSize=10;
 			cpdcontext.beginPath()
 			cpdcontext.moveTo(posit.x, -1*(posit.y));
