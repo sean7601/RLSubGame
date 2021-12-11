@@ -76,7 +76,6 @@ function tempdrawline(){
 			cpdcontext.lineTo(posit.x - Math.sin(linedir-degtorad(45))*arrowSize,-1*(posit.y - Math.cos(linedir-degtorad(45))*arrowSize));
 			cpdcontext.lineTo(posit.x, -1*(posit.y));
 			cpdcontext.fill();
-			cpdcontext.stroke();
 		} else {
 			// Draw the small circle marker for next point
 			cpdcontext.globalAlpha = 1;
