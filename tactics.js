@@ -32,25 +32,66 @@ function tempdrawcircle(){
 };
 function tempdrawline(){
 	linenum = Math.min(linenum,buoysleft);
-	linespace = distbtwnpt(mouseRef.x,mouseRef.y,mousePos1.x,mousePos1.y) * cpdmaxdistance / Math.min(cpdres.x,cpdres.y) / cpdscale / (linenum-1);
+	var markercount = 0;
+	
+	// If only single point event, add a second draw marker as a leaderline
+	if(linenum==1){
+		markercount=2;
+	} else {
+		markercount=linenum;
+	}
+	linespace = distbtwnpt(mouseRef.x,mouseRef.y,mousePos1.x,mousePos1.y) * cpdmaxdistance / Math.min(cpdres.x,cpdres.y) / cpdscale / (Math.max(1,linenum-1));
 	linedir = Math.atan2(mousePos1.x-mouseRef.x,-1*(mousePos1.y-mouseRef.y)) + Math.PI;
-	for(r=0;r<linenum;r++){
+	
+	// Create the origin point so it can be referenced later
+	var startPosit = new Object;
+	startPosit = converttoreal(mousePos1.x-cpdcenter.x,mousePos1.y-cpdcenter.y);
+	startPosit.x = startPosit.x + 0 * Math.sin(linedir) * linespace;
+	startPosit.y = (-1*startPosit.y + 0 * Math.cos(linedir) * linespace);
+	startPosit = converttofake(startPosit.x,startPosit.y);
+	
+	// Loop through all the markers to draw.
+	for(r=0;r<markercount;r++){
 		var posit = new Object;
 		posit = converttoreal(mousePos1.x-cpdcenter.x,mousePos1.y-cpdcenter.y);
 		posit.x = posit.x + r * Math.sin(linedir) * linespace;
 		posit.y = (-1*posit.y + r * Math.cos(linedir) * linespace);
 		posit = converttofake(posit.x,posit.y);
+		// Draw and fill pending points in Blue
 		cpdcontext.fillStyle = "blue";
 		cpdcontext.strokeStyle = "blue";
-		cpdcontext.beginPath();
-		cpdcontext.arc(Math.round(posit.x),-1*(posit.y),2,0,2*Math.PI);
-		cpdcontext.stroke();
-		cpdcontext.beginPath();
-		cpdcontext.globalAlpha = 0.5;
-		cpdcontext.arc(Math.round(posit.x),-1*(posit.y),range/ cpdmaxdistance * Math.min(cpdres.x,cpdres.y) * cpdscale,0,2*Math.PI);
-		cpdcontext.fill();
+		if(linenum==1 && r!=0){
+			// Draw the dashed leader line
+			cpdcontext.setLineDash([5,5]);
+			cpdcontext.beginPath();
+			cpdcontext.moveTo(startPosit.x,-1*(startPosit.y));
+			cpdcontext.lineTo(posit.x,-1*(posit.y));
+			cpdcontext.stroke();
+			cpdcontext.setLineDash([]);
+			// Translate to end of line, draw arrowhead, rotate it, fill it, translate back to origin
+			let arrowSize=10;
+			cpdcontext.beginPath()
+			cpdcontext.moveTo(posit.x, -1*(posit.y));
+			cpdcontext.lineTo(posit.x - Math.sin(linedir+degtorad(45))*arrowSize,-1*(posit.y - Math.cos(linedir+degtorad(45))*arrowSize));
+			cpdcontext.lineTo(posit.x - Math.sin(linedir-degtorad(45))*arrowSize,-1*(posit.y - Math.cos(linedir-degtorad(45))*arrowSize));
+			cpdcontext.lineTo(posit.x, -1*(posit.y));
+			cpdcontext.fill();
+			cpdcontext.stroke();
+		} else {
+			// Draw the small circle marker for next point
+			cpdcontext.globalAlpha = 1;
+			cpdcontext.beginPath();
+			cpdcontext.arc(Math.round(posit.x),-1*(posit.y),2,0,2*Math.PI);
+			cpdcontext.stroke();
+			// Draw the MDR filled circle for the next point
+			cpdcontext.beginPath();
+			cpdcontext.globalAlpha = 0.5;
+			cpdcontext.arc(Math.round(posit.x),-1*(posit.y),range/ cpdmaxdistance * Math.min(cpdres.x,cpdres.y) * cpdscale,0,2*Math.PI);
+			cpdcontext.fill();
+		}
 		cpdcontext.globalAlpha = 1;
 	}
+	
 };
 
 function tempdrawattack(){
